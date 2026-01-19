@@ -22,6 +22,8 @@ jobs:
       - uses: fragoi/bash-actions@main
 
       - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           createRelease
 
