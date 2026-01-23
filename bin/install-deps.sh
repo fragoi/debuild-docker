@@ -16,6 +16,6 @@ if [ -z "$depends" ] && [ -z "$conflicts" ]; then
   exit
 fi
 
-apt-get update
+apt-get update || true
 apt-get satisfy -y "$depends" \
   ${conflicts:+"Conflicts: ${conflicts}"}
