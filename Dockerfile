@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM ubuntu:25.04
 
 LABEL org.opencontainers.image.source=https://github.com/fragoi/debuild-docker
 LABEL org.opencontainers.image.description="Build debian packages"
