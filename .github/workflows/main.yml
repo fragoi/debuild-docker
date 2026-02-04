@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - LTS
+      - v25
     paths-ignore:
       - .github/**
   workflow_dispatch:
