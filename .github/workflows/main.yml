@@ -15,8 +15,6 @@ permissions:
 env:
   GIT_USER_NAME: Fra Bot
   GIT_USER_EMAIL: fragoibot@gmail.com
-  V_MAJOR: 1
-  V_MINOR: 1
   V_PATCH: 1
 
 jobs:
@@ -48,17 +46,9 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: v${{ env.NEW_VERSION }}
-
-      - name: Build image
+      - uses: fragoi/bash-actions@main
+      - name: Build and publish image
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          docker build -t ghcr.io/fragoi/debuild:${NEW_VERSION} .
-
-      - name: Login to registry
-        run: |
-          docker login ghcr.io \
-            --username "$GIT_USER_NAME" \
-            --password-stdin <<< "${{ secrets.GITHUB_TOKEN }}"
-
-      - name: Push image
-        run: |
-          docker push ghcr.io/fragoi/debuild:${NEW_VERSION}
+          dockerBuildAndPublish fragoi/debuild ${NEW_VERSION}
