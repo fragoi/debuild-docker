@@ -22,6 +22,8 @@ jobs:
 
   release:
     runs-on: ubuntu-latest
+    env:
+      NEW_VERSION:
     steps:
       - uses: actions/checkout@v6
       - uses: fragoi/bash-actions@main
@@ -33,11 +35,11 @@ jobs:
           createRelease
 
       - name: Export version
-        id: exportVersion
         run: |
           exportSharedVars NEW_VERSION
 
       - name: Build and publish image
+        if: ${{ env.NEW_VERSION }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
