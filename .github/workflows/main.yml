@@ -22,32 +22,21 @@ jobs:
 
   release:
     runs-on: ubuntu-latest
-    outputs:
-      new_version: ${{ steps.exportVersion.outputs.NEW_VERSION }}
     steps:
       - uses: actions/checkout@v6
       - uses: fragoi/bash-actions@main
+
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           createRelease
+
       - name: Export version
         id: exportVersion
         run: |
-          outputSharedVars NEW_VERSION
+          exportSharedVars NEW_VERSION
 
-  build-and-publish:
-    needs: [release]
-    runs-on: ubuntu-latest
-    if: ${{ needs.release.outputs.new_version }}
-    env:
-      NEW_VERSION: ${{ needs.release.outputs.new_version }}
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: v${{ env.NEW_VERSION }}
-      - uses: fragoi/bash-actions@main
       - name: Build and publish image
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
