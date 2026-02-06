@@ -44,11 +44,11 @@ archiveDirName() {
 ensureDebian() {
   local dir=$1
 
-  if [ -d "${dir}/debian" ]; then
+  if [[ -d "${dir}/debian" ]]; then
     return 0
   fi
 
-  if [ -d "debian" ]; then
+  if [[ -d "debian" ]]; then
     echo "Copying debian directory from current directory"
     cp -a debian "$dir"
     return 0
@@ -61,7 +61,7 @@ ensureDebian() {
 
     local archiveDir=$(archiveDirName "$archive")
     local debdir=$(find "$archiveDir" -maxdepth 2 -type d -name "debian")
-    if [ "$debdir" ]; then
+    if [[ "$debdir" ]]; then
       echo "Copying debian directory from archive"
       cp -a "$debdir" "$dir"
       return 0
@@ -91,11 +91,11 @@ prepare() {
     return 1
   }
 
-  if ! [ -d "$_dir" ]; then
+  if ! [[ -d "$_dir" ]]; then
     echo "Extracting archive"
     tar -xf "$_arc"
 
-    if ! [ -d "$_dir" ]; then
+    if ! [[ -d "$_dir" ]]; then
       echo "Archive does not contain expected directory ${_dir}, abort."
       return 1
     fi
