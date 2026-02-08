@@ -1,12 +1,10 @@
-name: Build and publish
+name: Release and update
 
 on:
   push:
     branches:
       - main
-      - v25
-    paths-ignore:
-      - .github/**
+      - v[0-9]+
   workflow_dispatch:
 
 permissions:
@@ -16,31 +14,20 @@ permissions:
 env:
   GIT_USER_NAME: Fra Bot
   GIT_USER_EMAIL: fragoibot@gmail.com
-  V_PATCH: 1
 
 jobs:
 
   release:
-    runs-on: ubuntu-latest
-    env:
-      NEW_VERSION:
-    steps:
-      - uses: actions/checkout@v6
-      - uses: fragoi/bash-actions@v1
+    uses: ./.github/workflows/branch-release.yml
 
-      - name: Create release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          createRelease
-
-      - name: Export version
-        run: |
-          exportSharedVars NEW_VERSION
-
-      - name: Build and publish image
-        if: ${{ env.NEW_VERSION }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          dockerBuildAndPublish fragoi/debuild ${NEW_VERSION}
+  update:
+    if: ${{ github.ref_name == 'main' }}
+    needs: release
+    strategy:
+      max-parallel: 1
+      matrix:
+        branch:
+          - v25
+    uses: ./.github/workflows/branch-update.yml
+    with:
+      branch: ${{ matrix.branch }}
