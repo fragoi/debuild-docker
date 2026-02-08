@@ -1,12 +1,10 @@
-name: Build and publish
+name: Release and update
 
 on:
   push:
     branches:
       - main
-      - v25
-    paths-ignore:
-      - .github/**
+      - v[0-9]+
   workflow_dispatch:
 
 permissions:
@@ -16,31 +14,34 @@ permissions:
 env:
   GIT_USER_NAME: Fra Bot
   GIT_USER_EMAIL: fragoibot@gmail.com
-  V_PATCH: 1
 
 jobs:
 
   release:
+    uses: ./.github/workflows/branch-release.yml
+
+  series:
     runs-on: ubuntu-latest
-    env:
-      NEW_VERSION:
+    outputs:
+      branches: ${{ steps.series.outputs.branches }}
     steps:
-      - uses: actions/checkout@v6
-      - uses: fragoi/bash-actions@main
-
-      - name: Create release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: fragoi/bash-actions@v1
+      - name: List series branches
+        id: series
         run: |
-          createRelease
+          export REMOTE=${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}
+          branches=$(listBranches 'v[0-9]*')
+          branches=$(toJSONArray $branches)
+          echo "Series branches: ${branches}"
+          output "branches=${branches}"
 
-      - name: Export version
-        run: |
-          exportSharedVars NEW_VERSION
-
-      - name: Build and publish image
-        if: ${{ env.NEW_VERSION }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          dockerBuildAndPublish fragoi/debuild ${NEW_VERSION}
+  update:
+    if: ${{ github.ref_name == 'main' }}
+    needs: [release, series]
+    strategy:
+      max-parallel: 1
+      matrix:
+        branch: ${{ fromJson(needs.series.outputs.branches) }}
+    uses: ./.github/workflows/branch-update.yml
+    with:
+      branch: ${{ matrix.branch }}

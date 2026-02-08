@@ -1,0 +1,36 @@
+name: ~branch-update
+
+on:
+  workflow_call:
+    inputs:
+      branch:
+        description: The branch to update
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  packages: write
+
+env:
+  GIT_USER_NAME: Fra Bot
+  GIT_USER_EMAIL: fragoibot@gmail.com
+
+jobs:
+
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.branch }}
+      - uses: fragoi/bash-actions@v1
+      - name: Update branch
+        run: |
+          updateBranch ${{ github.ref_name }}
+
+  release:
+    needs: update
+    uses: ./.github/workflows/branch-release.yml
+    with:
+      branch: ${{ inputs.branch }}
