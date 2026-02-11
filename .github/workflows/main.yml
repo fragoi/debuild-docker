@@ -25,7 +25,7 @@ jobs:
     outputs:
       branches: ${{ steps.series.outputs.branches }}
     steps:
-      - uses: fragoi/bash-actions@v1
+      - uses: fragoi/bash-actions@v2
       - name: List series branches
         id: series
         run: |

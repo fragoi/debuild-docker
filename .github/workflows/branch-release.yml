@@ -15,7 +15,8 @@ permissions:
 env:
   GIT_USER_NAME: Fra Bot
   GIT_USER_EMAIL: fragoibot@gmail.com
-  V_PATCH: 1
+  V_MAJOR: 0
+  V_MINOR: 0
 
 jobs:
 
@@ -27,7 +28,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.branch }}
-      - uses: fragoi/bash-actions@v1
+      - uses: fragoi/bash-actions@v2
 
       - name: Create release
         env:
