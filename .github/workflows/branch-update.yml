@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.branch }}
-      - uses: fragoi/bash-actions@v1
+      - uses: fragoi/bash-actions@v2
       - name: Update branch
         run: |
           updateBranch ${{ github.ref_name }}
