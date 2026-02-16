@@ -4,7 +4,7 @@
 
 . archive.sh
 
-prepare orig dir
+prepare archive dir
 
 echo "Changing directory ${dir}"
 cd "$dir"
@@ -13,8 +13,8 @@ echo "Run dpkg-source"
 dpkg-source -b . $SOURCE_OPTS
 
 echo "Read package info"
-name=$(dpkg-parsechangelog -S source)
-version=$(dpkg-parsechangelog -S version)
+name=$(dpkg-parsechangelog -S Source)
+version=$(dpkg-parsechangelog -S Version)
 
 #dpkg-genbuildinfo --build=source -O"../${name}_${version}_source.buildinfo"
 
