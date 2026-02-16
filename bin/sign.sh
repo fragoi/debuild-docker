@@ -2,7 +2,7 @@
 
 . archive.sh
 
-prepare orig dir
+prepare archive dir
 
 echo "Changing directory ${dir}"
 cd "$dir"
