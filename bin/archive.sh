@@ -1,5 +1,6 @@
 #!/bin/bash
 
+DEBUILD_ARCHIVE=${DEBUILD_ARCHIVE}
 NAME_PATTERN=${DEBPACKAGE:-'.*'}
 SUFFIX='tar.gz'
 
@@ -79,13 +80,17 @@ prepare() {
   local -n _arc=$1
   local -n _dir=$2
 
-  echo "Looking for archive..."
-  _arc=$(findOne ".orig.${SUFFIX}" || findOne ".${SUFFIX}") || {
-    echo "Archive not found, abort."
-    return 1
-  }
+  if [[ "$DEBUILD_ARCHIVE" ]]; then
+    _arc=$DEBUILD_ARCHIVE
+  else
+    echo "Looking for archive..."
+    _arc=$(findOne ".orig.${SUFFIX}" || findOne ".${SUFFIX}") || {
+      echo "Archive not found, abort."
+      return 1
+    }
+  fi
 
-  echo "Found archive ${_arc}"
+  echo "Using archive ${_arc}"
   _dir=$(origDirName "$_arc" || archiveDirName "$_arc") || {
     echo "Cannot guess directory name from archive, abort."
     return 1
