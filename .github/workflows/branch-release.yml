@@ -45,4 +45,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          dockerBuildAndPublish fragoi/debuild ${NEW_VERSION}
+          dockerBuildAndPublish fragoi/debuild ${NEW_VERSION} \
+            ${NEW_VERSION%%.*}
