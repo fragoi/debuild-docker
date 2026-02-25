@@ -36,7 +36,7 @@ jobs:
           output "branches=${branches}"
 
   update:
-    if: ${{ github.ref_name == 'main' }}
+    if: ${{ github.ref_name == 'main' && needs.series.outputs.branches != '[]' }}
     needs: [release, series]
     strategy:
       max-parallel: 1
