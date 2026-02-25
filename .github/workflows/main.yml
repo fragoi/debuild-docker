@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - v[0-9]*
+      - v[du][0-9]*
   workflow_dispatch:
 
 permissions:
@@ -30,7 +30,7 @@ jobs:
         id: series
         run: |
           export REMOTE=${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}
-          branches=$(listBranches 'v[0-9]*')
+          branches=$(listBranches 'v[du][0-9]*')
           branches=$(toJSONArray $branches)
           echo "Series branches: ${branches}"
           output "branches=${branches}"

@@ -15,7 +15,7 @@ permissions:
 env:
   GIT_USER_NAME: Fra Bot
   GIT_USER_EMAIL: fragoibot@gmail.com
-  V_MAJOR: 0
+  V_MAJOR: 1
   V_MINOR: 0
 
 jobs:
@@ -46,4 +46,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           dockerBuildAndPublish fragoi/debuild ${NEW_VERSION} \
-            ${NEW_VERSION%%.*}
+            ${NEW_VERSION%.*}
