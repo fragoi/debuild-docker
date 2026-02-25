@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM debian:13
 
 LABEL org.opencontainers.image.source=https://github.com/fragoi/debuild-docker
 LABEL org.opencontainers.image.description="Build debian packages"
@@ -9,7 +9,6 @@ COPY apt_conf_http /etc/apt/apt.conf.d/
 RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get update \
     && apt-get install -y --no-install-recommends --no-install-suggests \
-        software-properties-common \
         build-essential \
         devscripts \
         openssh-client \
